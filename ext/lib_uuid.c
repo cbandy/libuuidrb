@@ -35,6 +35,7 @@ VALUE
 lib_uuid_new(unsigned int argc, VALUE *argv, VALUE class)
 {
   lib_uuid_t *s;
+  long       len = 0;
   uuid_t     parsed_uu;
   VALUE      ret;
 
@@ -48,12 +49,21 @@ lib_uuid_new(unsigned int argc, VALUE *argv, VALUE class)
   {
     if( uuid_from_obj(argv[0], parsed_uu) == -1 )
       return Qnil;
+
+    if( TYPE(argv[0]) == T_STRING )
+      len = RSTRING_LEN(argv[0]);
   }
 
   s = ALLOC_N(lib_uuid_t, 1);
   uuid_copy(s->uu, parsed_uu);
   ret = Data_Wrap_Struct(class, NULL, lib_uuid_free, s);
   rb_obj_call_init(ret, 0, 0);
+
+  if( len == GUID_STRLEN-1 )
+    s->guid = rb_str_dup(argv[0]);
+
+  if( len == SHORT_GUID_STRLEN-1 )
+    s->short_guid = rb_str_dup(argv[0]);
 
   return ret;
 }
