@@ -5,7 +5,7 @@
 
 typedef struct {
 
-  VALUE guid, type, variant;
+  VALUE guid, variant;
   uuid_t uu;
 
 } lib_uuid_t;

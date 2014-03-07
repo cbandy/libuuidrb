@@ -126,7 +126,7 @@ lib_uuid_initialize(VALUE self)
   lib_uuid_t *s;
 
   Data_Get_Struct(self, lib_uuid_t, s);
-  s->guid = s->type = s->variant = 0;
+  s->guid = s->variant = 0;
   rb_iv_set(self, "@bytes", rb_str_new((char *) s->uu, 16));
 
   return self;
@@ -142,13 +142,18 @@ VALUE
 lib_uuid_type(VALUE self)
 {
   lib_uuid_t *s;
+  VALUE      result;
 
-  Data_Get_Struct(self, lib_uuid_t, s);
+  result = rb_iv_get(self, "@type");
 
-  if( s->type == 0 )
-    s->type = INT2NUM(uuid_type(s->uu));
+  if( NIL_P(result) )
+  {
+    Data_Get_Struct(self, lib_uuid_t, s);
+    result = INT2NUM(uuid_type(s->uu));
+    rb_iv_set(self, "@type", result);
+  }
 
-  return s->type;
+  return result;
 }
 
 VALUE
