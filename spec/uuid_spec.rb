@@ -38,12 +38,24 @@ module LibUUID
         expect(subject.type).to be(4)
       end
 
-      it 'parses a UUID' do
+      it 'parses a Version 1 UUID' do
         expect(UUID.new(uuid_v1)).to be_a(UUID)
         expect(UUID.new(uuid_v1).bytes).to eq(bytes(uuid_v1))
+      end
 
+      it 'parses a Version 3 UUID' do
+        expect(UUID.new(uuid_v3)).to be_a(UUID)
+        expect(UUID.new(uuid_v3).bytes).to eq(bytes(uuid_v3))
+      end
+
+      it 'parses a Version 4 UUID' do
         expect(UUID.new(uuid_v4)).to be_a(UUID)
         expect(UUID.new(uuid_v4).bytes).to eq(bytes(uuid_v4))
+      end
+
+      it 'parses a Version 5 UUID' do
+        expect(UUID.new(uuid_v5)).to be_a(UUID)
+        expect(UUID.new(uuid_v5).bytes).to eq(bytes(uuid_v5))
       end
 
       it 'returns nil when the input is not a valid UUID' do
