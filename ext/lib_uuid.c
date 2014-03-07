@@ -126,7 +126,6 @@ lib_uuid_initialize(VALUE self)
   lib_uuid_t *s;
 
   Data_Get_Struct(self, lib_uuid_t, s);
-  s->guid = 0;
   rb_iv_set(self, "@bytes", rb_str_new((char *) s->uu, 16));
 
   return self;
@@ -179,16 +178,19 @@ lib_uuid_to_guid(VALUE self)
 {
   lib_uuid_t *s;
   char       uu_str[GUID_STRLEN];
+  VALUE      result;
 
-  Data_Get_Struct(self, lib_uuid_t, s);
+  result = rb_iv_get(self, "@guid");
 
-  if( s->guid == 0 )
+  if( NIL_P(result) )
   {
+    Data_Get_Struct(self, lib_uuid_t, s);
     uuid_unparse(s->uu, uu_str);
-    s->guid = rb_str_new(uu_str, GUID_STRLEN-1);
+    result = rb_str_new(uu_str, GUID_STRLEN-1);
+    rb_iv_set(self, "@guid", result);
   }
 
-  return s->guid;
+  return result;
 }
 
 VALUE
