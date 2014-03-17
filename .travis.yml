@@ -28,6 +28,7 @@ before_install:
 script: >
   rake &&
   if [ "$BENCHMARK" ] ; then
-    ruby -I lib benchmark/create
-    ruby -I lib benchmark/parse
+    printf '\n%s\n' 'Create:'  && ruby -I lib benchmark/create
+    printf '\n%s\n' 'Parse:'   && ruby -I lib benchmark/parse
+    printf '\n%s\n' 'Unparse:' && ruby -I lib benchmark/unparse
   fi
